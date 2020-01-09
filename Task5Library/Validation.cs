@@ -8,74 +8,98 @@ namespace Task5Library
     {
         private string _inputValue;
 
-        public string GetValidValueThreeOptions(string parameter)
+        public string GetValidPriority()
         {
-            _inputValue = GetValueNotNullOrEmpty(parameter);
+            bool validValue = false;
+            _inputValue = GetValueNotNullOrEmpty("Priority");
 
-            while (!Regex.IsMatch(_inputValue, @"[1-3]") || !char.TryParse(_inputValue, out char result))
+            while (!validValue)
             {
+                foreach (string s in Enum.GetNames(typeof(Priority)))
+                {
+                    if (_inputValue.ToLower() == s.ToLower())
+                    {
+                        return s;
+                    }
+                }
+
                 Console.Clear();
+                Console.WriteLine($"Entered value is invalid.{Environment.NewLine}Please select priority:");
+                PrintAllPriorities();
 
-                if (parameter == Constants.textSelectPriority)
-                {
-                    Console.WriteLine($"{Constants.textInvalidValue}{Environment.NewLine}{Constants.textSelectPriority}");
-                    _inputValue = GetValueNotNullOrEmpty(parameter);
-                }
-
-                if (parameter == Constants.textSelectComplexity)
-                {
-                    Console.WriteLine($"{Constants.textInvalidValue}{Environment.NewLine}{Constants.textSelectComplexity}");
-                    _inputValue = GetValueNotNullOrEmpty(parameter);
-                }
-
-                if (parameter == Constants.textTasksByPriority)
-                {
-                    Console.WriteLine($"{Constants.textInvalidValue}{Environment.NewLine}{Constants.textTasksByPriority}");
-                    _inputValue = GetValueNotNullOrEmpty(parameter);
-                }
+                _inputValue = GetValueNotNullOrEmpty("Priority");
             }
             return _inputValue;
         }
 
-        public string GetValidValueTwoOptions(string parameter)
+        public string GetValidComplexity()
         {
-            _inputValue = GetValueNotNullOrEmpty(parameter);
+            bool validValue = false;
+            _inputValue = GetValueNotNullOrEmpty("Complexity");
 
-            while (!Regex.IsMatch(_inputValue, @"[1-2]") || !char.TryParse(_inputValue, out char result))
+            while (!validValue)
             {
+                foreach (string s in Enum.GetNames(typeof(Complexity)))
+                {
+                    if (_inputValue.ToLower() == s.ToLower())
+                    {
+                        return s;
+                    }
+                }
+
                 Console.Clear();
+                Console.WriteLine($"Entered value is invalid.{Environment.NewLine}Please select complexity for a new task:");
+                PrintAllComplexities();
 
-                if (parameter == Constants.textAnotherTask)
-                {
-                    Console.WriteLine($"{Constants.textInvalidValue}{Environment.NewLine}{Constants.textAnotherTask}");
-                    _inputValue = GetValueNotNullOrEmpty(parameter);
-                }
-
-                if (parameter == Constants.textAnotherPriority)
-                {
-                    Console.WriteLine($"{Constants.textInvalidValue}{Environment.NewLine}{Constants.textAnotherPriority}");
-                    _inputValue = GetValueNotNullOrEmpty(parameter);
-                }
-
-                if (parameter == Constants.textAnotherDays)
-                {
-                    Console.WriteLine($"{Constants.textInvalidValue}{Environment.NewLine}{Constants.textAnotherDays}");
-                    _inputValue = GetValueNotNullOrEmpty(parameter);
-                }
+                _inputValue = GetValueNotNullOrEmpty("Complexity");
             }
             return _inputValue;
         }
 
-        public string GetValidDays(string parameter)
+        public bool GetValidYesNo(string parameter)
         {
-            _inputValue = GetValueNotNullOrEmpty(parameter);
+            _inputValue = GetValueNotNullOrEmpty("Another" + parameter);
+
+            while (_inputValue.ToLower() != "yes" && _inputValue.ToLower() != "no")
+            {
+                Console.Clear();
+
+                if (parameter == "Task")
+                {
+                    Console.WriteLine($"Entered value is invalid.{Environment.NewLine}Do you want to enter another task: Yes/No");
+                }
+
+                if (parameter == "Priority")
+                {
+                    Console.WriteLine($"Entered value is invalid.{Environment.NewLine}Do you want to see the tasks of another priority: Yes/No");
+                }
+
+                if (parameter == "Days")
+                {
+                    Console.WriteLine($"Entered value is invalid.{Environment.NewLine}Do you want to enter another number of days: Yes/No");
+                }
+
+                _inputValue = GetValueNotNullOrEmpty("Another" + parameter);
+            }
+
+            if (_inputValue.ToLower() == "yes")
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+        public string GetValidDays()
+        {
+            _inputValue = GetValueNotNullOrEmpty("Days");
 
             while (!int.TryParse(_inputValue, out int validatedValue) || validatedValue <= 0)
             {
                 Console.Clear();
 
-                Console.WriteLine($"{Constants.textInvalidValue}{Environment.NewLine}{parameter}");
-                _inputValue = GetValueNotNullOrEmpty(parameter);
+                Console.WriteLine($"Entered value is invalid.{Environment.NewLine}Please enter number of days. You will see the tasks that can be completed in a given number of days ({Constants.workingHoursPerDay} working hours per day).");
+                _inputValue = GetValueNotNullOrEmpty("Days");
             }
             return _inputValue;
         }
@@ -88,55 +112,64 @@ namespace Task5Library
             {
                 Console.Clear();
 
-                if (parameter == Constants.textSelectPriority)
+                if (parameter == "Priority")
                 {
-                    Console.WriteLine($"{Constants.textNullEmpty}{Environment.NewLine}{Constants.textSelectPriority}");
-                    inputValue = Console.ReadLine();
+                    Console.WriteLine($"Entered value is null or empty.{Environment.NewLine}Please select priority:");
+                    PrintAllPriorities();
                 }
 
-                if (parameter == Constants.textSelectComplexity)
+                if (parameter == "Complexity")
                 {
-                    Console.WriteLine($"{Constants.textNullEmpty}{Environment.NewLine}{Constants.textSelectComplexity}");
-                    inputValue = Console.ReadLine();
+                    Console.WriteLine($"Entered value is null or empty.{Environment.NewLine}Please select complexity for a new task:");
+                    PrintAllComplexities();
                 }
 
-                if (parameter == Constants.textEnterDescription)
+                if (parameter == "Description")
                 {
-                    Console.WriteLine($"{Constants.textNullEmpty}{Environment.NewLine}{Constants.textEnterDescription}");
-                    inputValue = Console.ReadLine();
+                    Console.WriteLine($"Entered value is null or empty.{Environment.NewLine}Please enter description for a new task:");
                 }
 
-                if (parameter == Constants.textAnotherTask)
+                if (parameter == "AnotherTask")
                 {
-                    Console.WriteLine($"{Constants.textNullEmpty}{Environment.NewLine}{Constants.textAnotherTask}");
-                    inputValue = Console.ReadLine();
+                    Console.WriteLine($"Entered value is null or empty.{Environment.NewLine}Do you want to enter another task: Yes/No");
                 }
 
-                if (parameter == Constants.textTasksByPriority)
+                if (parameter == "AnotherPriority")
                 {
-                    Console.WriteLine($"{Constants.textNullEmpty}{Environment.NewLine}{Constants.textTasksByPriority}");
-                    inputValue = Console.ReadLine();
+                    Console.WriteLine($"Entered value is null or empty.{Environment.NewLine}Do you want to see the tasks of another priority: Yes/No");
                 }
 
-                if (parameter == Constants.textAnotherPriority)
+                if (parameter == "Days")
                 {
-                    Console.WriteLine($"{Constants.textNullEmpty}{Environment.NewLine}{Constants.textAnotherPriority}");
-                    inputValue = Console.ReadLine();
+                    Console.WriteLine($"Entered value is null or empty.{Environment.NewLine}Please enter number of days. You will see the tasks that can be completed in a given number of days ({Constants.workingHoursPerDay} working hours per day).");
                 }
 
-                if (parameter == Constants.textEnterDays)
+                if (parameter == "AnotherDays")
                 {
-                    Console.WriteLine($"{Constants.textNullEmpty}{Environment.NewLine}{Constants.textEnterDays}");
-                    inputValue = Console.ReadLine();
+                    Console.WriteLine($"Entered value is null or empty.{Environment.NewLine}Do you want to enter another number of days: Yes/No");
                 }
 
-                if (parameter == Constants.textAnotherDays)
-                {
-                    Console.WriteLine($"{Constants.textNullEmpty}{Environment.NewLine}{Constants.textAnotherDays}");
-                    inputValue = Console.ReadLine();
-                }
+                inputValue = Console.ReadLine();
             }
             return Convert.ToString(inputValue);
+        }
+
+        public void PrintAllPriorities()
+        {
+            foreach (string s in Enum.GetNames(typeof(Priority)))
+            {
+                Console.Write("{0}   ", s);
+            }
+            Console.WriteLine($"{Environment.NewLine}");
+        }
+
+        public void PrintAllComplexities()
+        {
+            foreach (string s in Enum.GetNames(typeof(Complexity)))
+            {
+                Console.Write("{0}   ", s);
+            }
+            Console.WriteLine($"{Environment.NewLine}");
         }
     }
 }

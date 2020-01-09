@@ -13,67 +13,59 @@ namespace Task5Library
         public void RecordInputTasksAndPrintExecutionTime()
         {
             int counter = 0;
-            int proceed = 1;
             int executionTime = 0;
+            int inputPriorityID = 1;
             string inputPriority;
-            string inputPriorityName;
             string inputComplexity;
-            string inputComplexityName;
             string inputDescription;
-            string wantNewTask;
+            bool wantProceed = true;
 
-            while (proceed == 1)
+            while (wantProceed)
             {
                 Console.Clear();
-                Console.WriteLine($"{Constants.textSelectPriority}");
-                inputPriority = validation.GetValidValueThreeOptions(Constants.textSelectPriority);
+                Console.WriteLine($"Please select priority for a new task:");
+                validation.PrintAllPriorities();
+                inputPriority = validation.GetValidPriority();
 
-                Console.WriteLine($"{Environment.NewLine}{Constants.textSelectComplexity}");
-                inputComplexity = validation.GetValidValueThreeOptions(Constants.textSelectComplexity);
+                Console.WriteLine($"{Environment.NewLine}Please select number of complexity for a new task:");
+                validation.PrintAllComplexities();
+                inputComplexity = validation.GetValidComplexity();
 
-                Console.WriteLine($"{Environment.NewLine}{Constants.textEnterDescription}");
-                inputDescription = validation.GetValueNotNullOrEmpty(Constants.textEnterDescription);
+                Console.WriteLine($"{Environment.NewLine}Please enter description for a new task:");
+                inputDescription = validation.GetValueNotNullOrEmpty("Description");
 
-                Console.WriteLine($"{Environment.NewLine}{Constants.textAnotherTask}");
-                wantNewTask = validation.GetValidValueTwoOptions(Constants.textAnotherTask);
+                Console.WriteLine($"{Environment.NewLine}Do you want to enter another task: Yes/No");
+                wantProceed = validation.GetValidYesNo("Task");
 
-                if (Convert.ToInt32(wantNewTask) == 2)
+                switch (inputPriority)
                 {
-                    proceed = 2;
+                    case "High":
+                        inputPriorityID = Convert.ToInt32(Priority.High);
+                        break;
+                    case "Medium":
+                        inputPriorityID = Convert.ToInt32(Priority.Medium);
+                        break;
+                    case "Low":
+                        inputPriorityID = Convert.ToInt32(Priority.Low);
+                        break;
+                }
+
+                switch (inputComplexity)
+                {
+                    case "Hard":
+                        executionTime += Convert.ToInt32(Complexity.Hard);
+                        break;
+                    case "Medium":
+                        executionTime += Convert.ToInt32(Complexity.Medium);
+                        break;
+                    case "Simple":
+                        executionTime += Convert.ToInt32(Complexity.Simple);
+                        break;
                 }
 
                 counter++;
 
-                if (inputPriority == "1")
-                {
-                    inputPriorityName = "High";
-                }
-                else if (inputPriority == "2")
-                {
-                    inputPriorityName = "Medium";
-                }
-                else
-                {
-                    inputPriorityName = "Low";
-                }
-
-                if (inputComplexity == "1")
-                {
-                    inputComplexityName = "Hard";
-                    executionTime += Constants.hardComplexity;
-                }
-                else if (inputComplexity == "2")
-                {
-                    inputComplexityName = "Medium";
-                    executionTime += Constants.mediumComplexity;
-                }
-                else
-                {
-                    inputComplexityName = "Simple";
-                    executionTime += Constants.simpleComplexity;
-                }
-
-                task.Add(new Task() {TaskID = counter, PriorityID = Convert.ToInt32(inputPriority), PriorityName = inputPriorityName, ComplexityID = Convert.ToInt32(inputComplexity), ComplexityName = inputComplexityName, Description = inputDescription});
+                task.Add(new Task() { TaskID = counter, PriorityID = inputPriorityID, PriorityName = inputPriority, ComplexityName = inputComplexity, Description = inputDescription });
             }
 
             Console.Clear();
@@ -82,67 +74,62 @@ namespace Task5Library
 
         public void PrintTasksByPriority()
         {
-            int proceed = 1;
             string inputPriority;
-            string wantNewPriority;
+            bool wantProceed = true;
 
-            while (proceed == 1)
+            while (wantProceed)
             {
                 Console.Clear();
-                Console.WriteLine($"{Constants.textTasksByPriority}");
-                inputPriority = validation.GetValidValueThreeOptions(Constants.textTasksByPriority);
+                Console.WriteLine($"Please select number of priority to see all tasks with such priority:");
+                validation.PrintAllPriorities();
+                inputPriority = validation.GetValidPriority();
 
                 foreach (Task tTask in task)
                 {
-                    if (tTask.PriorityID == Convert.ToInt32(inputPriority))
+                    if (tTask.PriorityName.ToLower() == inputPriority.ToLower())
                     {
-                        Console.WriteLine($"{Environment.NewLine}Priority: {tTask.priorityName}{Environment.NewLine}Complexity: {tTask.ComplexityName}{Environment.NewLine}Description: {tTask.Description}");
+                        Console.WriteLine($"{Environment.NewLine}Priority: {tTask.PriorityName}{Environment.NewLine}Complexity: {tTask.ComplexityName}{Environment.NewLine}Description: {tTask.Description}");
                     }
                 }
 
-                Console.WriteLine($"{Environment.NewLine}{Constants.textAnotherPriority}");
-                wantNewPriority = validation.GetValidValueTwoOptions(Constants.textAnotherPriority);
-
-                if (Convert.ToInt32(wantNewPriority) == 2)
-                {
-                    proceed = 2;
-                }
+                Console.WriteLine($"{Environment.NewLine}Do you want to see the tasks of another priority: Yes/No");
+                wantProceed = validation.GetValidYesNo("Priority");
             }
         }
 
         public void PrintTasksCompleteInEnteredDays()
         {
-            int proceed = 1;
             int inputHours = 0;
             string inputDays;
-            string wantNewDays;
+            bool wantProceed = true;
+
             task.Sort((x, y) => x.PriorityID.CompareTo(y.PriorityID));
 
-            while (proceed == 1)
+            while (wantProceed)
             {
                 Console.Clear();
-                Console.WriteLine($"{Constants.textEnterDays}");
-                inputDays = validation.GetValidValueThreeOptions(Constants.textEnterDays);
+                Console.WriteLine($"Please enter number of days. You will see the tasks that can be completed in a given number of days ({Constants.workingHoursPerDay} working hours per day).");
+                inputDays = validation.GetValidDays();
                 inputHours = Convert.ToInt32(inputDays) * Constants.workingHoursPerDay;
 
                 foreach (Task tTask in task)
                 {
-                    if (tTask.ComplexityID == 1 && inputHours >= Constants.hardComplexity)
+                    if (tTask.ComplexityName == Enum.GetName(typeof(Complexity),4) && inputHours >= Convert.ToInt32(Complexity.Hard))
                     {
-                        inputHours -= Constants.hardComplexity;
-                        Console.WriteLine($"{Environment.NewLine}Priority: {tTask.priorityName}{Environment.NewLine}Complexity: {tTask.ComplexityName}{Environment.NewLine}Description: {tTask.Description}");
+                        inputHours -= Convert.ToInt32(Complexity.Hard);
+                        Console.WriteLine($"{Environment.NewLine}Priority: {tTask.PriorityName}{Environment.NewLine}Complexity: {tTask.ComplexityName}{Environment.NewLine}Description: {tTask.Description}");
                     }
 
-                    if (tTask.ComplexityID == 2 && inputHours >= Constants.mediumComplexity)
+                    if (tTask.ComplexityName == Enum.GetName(typeof(Complexity), 2) && inputHours >= Convert.ToInt32(Complexity.Medium))
                     {
-                        inputHours -= Constants.mediumComplexity;
-                        Console.WriteLine($"{Environment.NewLine}Priority: {tTask.priorityName}{Environment.NewLine}Complexity: {tTask.ComplexityName}{Environment.NewLine}Description: {tTask.Description}");
+                        inputHours -= Convert.ToInt32(Complexity.Medium);
+                        Console.WriteLine($"{Environment.NewLine}Priority: {tTask.PriorityName}{Environment.NewLine}Complexity: {tTask.ComplexityName}{Environment.NewLine}Description: {tTask.Description}");
                     }
 
-                    if (tTask.ComplexityID == 3 && inputHours >= Constants.simpleComplexity)
+                    if (tTask.ComplexityName == Enum.GetName(typeof(Complexity), 1) && inputHours >= Convert.ToInt32(Complexity.Simple))
                     {
-                        inputHours -= Constants.simpleComplexity;
-                        Console.WriteLine($"{Environment.NewLine}Priority: {tTask.priorityName}{Environment.NewLine}Complexity: {tTask.ComplexityName}{Environment.NewLine}Description: {tTask.Description}");
+                        inputHours -= Convert.ToInt32(Complexity.Simple);
+                        Console.WriteLine($"{Environment.NewLine}Priority: {tTask.PriorityName}{Environment.NewLine}Complexity: {tTask.ComplexityName}{Environment.NewLine}Description: {tTask.Description}");
                     }
 
                     if (inputHours == 0)
@@ -151,14 +138,10 @@ namespace Task5Library
                     }
                 }
 
-                Console.WriteLine($"{Environment.NewLine}{Constants.textAnotherDays}");
-                wantNewDays = validation.GetValidValueTwoOptions(Constants.textAnotherDays);
-
-                if (Convert.ToInt32(wantNewDays) == 2)
-                {
-                    proceed = 2;
-                }
+                Console.WriteLine($"{Environment.NewLine}Do you want to enter another number of days: Yes/No");
+                wantProceed = validation.GetValidYesNo("Days");
             }
         }
     }
 }
+
