@@ -1,7 +1,4 @@
-﻿using System;
-using System.Text;
-
-namespace Task5Library
+﻿namespace Task5Library
 {
     public class Task
     {

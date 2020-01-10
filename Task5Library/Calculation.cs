@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace Task5Library
 {
     public class Calculation
     {
-        List<Task> task = new List<Task>();
+        List<Task> tasks = new List<Task>();
 
         Validation validation = new Validation();
 
@@ -65,7 +64,7 @@ namespace Task5Library
 
                 counter++;
 
-                task.Add(new Task() { TaskID = counter, PriorityID = inputPriorityID, PriorityName = inputPriority, ComplexityName = inputComplexity, Description = inputDescription });
+                tasks.Add(new Task() { TaskID = counter, PriorityID = inputPriorityID, PriorityName = inputPriority, ComplexityName = inputComplexity, Description = inputDescription });
             }
 
             Console.Clear();
@@ -84,7 +83,7 @@ namespace Task5Library
                 validation.PrintAllPriorities();
                 inputPriority = validation.GetValidPriority();
 
-                foreach (Task tTask in task)
+                foreach (Task tTask in tasks)
                 {
                     if (tTask.PriorityName.ToLower() == inputPriority.ToLower())
                     {
@@ -103,18 +102,18 @@ namespace Task5Library
             string inputDays;
             bool wantProceed = true;
 
-            task.Sort((x, y) => x.PriorityID.CompareTo(y.PriorityID));
+            tasks.Sort((x, y) => x.PriorityID.CompareTo(y.PriorityID));
 
             while (wantProceed)
             {
                 Console.Clear();
-                Console.WriteLine($"Please enter number of days. You will see the tasks that can be completed in a given number of days ({Constants.workingHoursPerDay} working hours per day).");
+                Console.WriteLine($"Please enter number of days. You will see the tasks that can be completed in a given number of days ({Constants.WorkingHoursPerDay} working hours per day).");
                 inputDays = validation.GetValidDays();
-                inputHours = Convert.ToInt32(inputDays) * Constants.workingHoursPerDay;
+                inputHours = Convert.ToInt32(inputDays) * Constants.WorkingHoursPerDay;
 
-                foreach (Task tTask in task)
+                foreach (Task tTask in tasks)
                 {
-                    if (tTask.ComplexityName == Enum.GetName(typeof(Complexity),4) && inputHours >= Convert.ToInt32(Complexity.Hard))
+                    if (tTask.ComplexityName == Enum.GetName(typeof(Complexity), 4) && inputHours >= Convert.ToInt32(Complexity.Hard))
                     {
                         inputHours -= Convert.ToInt32(Complexity.Hard);
                         Console.WriteLine($"{Environment.NewLine}Priority: {tTask.PriorityName}{Environment.NewLine}Complexity: {tTask.ComplexityName}{Environment.NewLine}Description: {tTask.Description}");
@@ -144,4 +143,3 @@ namespace Task5Library
         }
     }
 }
-

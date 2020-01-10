@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Text;
-using System.Text.RegularExpressions;
 
 namespace Task5Library
 {
-    class Validation
+    public class Validation
     {
         private string _inputValue;
 
@@ -98,7 +96,7 @@ namespace Task5Library
             {
                 Console.Clear();
 
-                Console.WriteLine($"Entered value is invalid.{Environment.NewLine}Please enter number of days. You will see the tasks that can be completed in a given number of days ({Constants.workingHoursPerDay} working hours per day).");
+                Console.WriteLine($"Entered value is invalid.{Environment.NewLine}Please enter number of days. You will see the tasks that can be completed in a given number of days ({Constants.WorkingHoursPerDay} working hours per day).");
                 _inputValue = GetValueNotNullOrEmpty("Days");
             }
             return _inputValue;
@@ -141,7 +139,7 @@ namespace Task5Library
 
                 if (parameter == "Days")
                 {
-                    Console.WriteLine($"Entered value is null or empty.{Environment.NewLine}Please enter number of days. You will see the tasks that can be completed in a given number of days ({Constants.workingHoursPerDay} working hours per day).");
+                    Console.WriteLine($"Entered value is null or empty.{Environment.NewLine}Please enter number of days. You will see the tasks that can be completed in a given number of days ({Constants.WorkingHoursPerDay} working hours per day).");
                 }
 
                 if (parameter == "AnotherDays")
@@ -151,7 +149,7 @@ namespace Task5Library
 
                 inputValue = Console.ReadLine();
             }
-            return Convert.ToString(inputValue);
+            return inputValue;
         }
 
         public void PrintAllPriorities()
