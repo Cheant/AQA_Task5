@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Task5Library
 {
@@ -7,96 +8,79 @@ namespace Task5Library
     {
         List<Task> tasks = new List<Task>();
 
-        Validation validation = new Validation();
-
-        EnumHelper enumHelper = new EnumHelper();
-
-        //EnumValueAttribute enumValueAttribute = new EnumValueAttribute(_enumValue);
-
-        public void RecordInputTasksAndPrintExecutionTime()
+        public void RecordInputTasks()
         {
-            int counter = 0;
-            int executionTime = 0;
-            Priority inputPriority;
-            Complexity inputComplexity;
-            string inputDescription;
-            bool wantProceed = true;
+            string wantProceed = nameof(YesNo.Yes);
 
-            while (wantProceed)
+            while (wantProceed == nameof(YesNo.Yes))
             {
                 Console.Clear();
                 Console.WriteLine($"Creation of a new Task.");
-                inputPriority = enumHelper.RequestForEnumValue<Priority>();
 
-                inputComplexity = enumHelper.RequestForEnumValue<Complexity>();
+                tasks.Add(new Task());
 
-                Console.WriteLine($"{Environment.NewLine}Enter Description:");
-                inputDescription = validation.GetValueNotNullOrEmpty("Description");
+                Console.WriteLine($"{Environment.NewLine}Do you want to create another Task?");
+                wantProceed = EnumHelper.RequestForEnumValue<YesNo>().ToString();
+            }
+        }
 
-                Console.WriteLine($"{Environment.NewLine}Do you want to create another Task: Yes/No");
-                wantProceed = validation.GetValidYesNo("Task");
+        public void PrintExecutionTimeForAllTasks()
+        {
+            int executionTime = 0;
 
-                executionTime += enumHelper.GetEnumValueAttribute<Complexity>(inputComplexity);
-
-                counter++;
-
-                tasks.Add(new Task()
-                {
-                    TaskID = counter,
-                    PriorityID = Convert.ToInt32(inputPriority),
-                    Priority = inputPriority,
-                    Complexity = inputComplexity,
-                    Description = inputDescription
-                });
+            foreach (Task task in tasks)
+            {
+                executionTime += EnumHelper.GetEnumValueAttribute<Complexity>(task.Complexity);
             }
 
             Console.Clear();
             Console.WriteLine($"{executionTime} hours are needed to complete all Tasks.{Environment.NewLine}");
+            Console.ReadKey();
         }
 
         public void PrintTasksByPriority()
         {
             Priority inputPriority;
-            bool wantProceed = true;
+            string wantProceed = nameof(YesNo.Yes);
 
-            while (wantProceed)
+            while (wantProceed == nameof(YesNo.Yes))
             {
                 Console.Clear();
                 Console.WriteLine($"Displaying Tasks by selected Priority.{Environment.NewLine}");
-                inputPriority = enumHelper.RequestForEnumValue<Priority>();
+                inputPriority = EnumHelper.RequestForEnumValue<Priority>();
 
-                foreach (Task tTask in tasks)
+                foreach (Task task in tasks)
                 {
-                    if (tTask.Priority == inputPriority)
+                    if (task.Priority == inputPriority)
                     {
-                        Console.WriteLine($"{Environment.NewLine}Priority: {tTask.Priority}{Environment.NewLine}Complexity: {tTask.Complexity}{Environment.NewLine}Description: {tTask.Description}");
+                        Console.WriteLine($"{Environment.NewLine}Priority: {task.Priority}{Environment.NewLine}Complexity: {task.Complexity}{Environment.NewLine}Description: {task.Description}");
                     }
                 }
 
-                Console.WriteLine($"{Environment.NewLine}Do you want to see the Tasks of another Priority: Yes/No");
-                wantProceed = validation.GetValidYesNo("Priority");
+                Console.WriteLine($"{Environment.NewLine}Do you want to see the Tasks of another Priority?");
+                wantProceed = EnumHelper.RequestForEnumValue<YesNo>().ToString();
             }
         }
 
         public void PrintTasksCompleteInEnteredDays()
         {
             int inputHours = 0;
-            bool wantProceed = true;
+            string wantProceed = nameof(YesNo.Yes);
 
-            tasks.Sort((x, y) => x.PriorityID.CompareTo(y.PriorityID));
+            tasks = tasks.OrderBy(x => x.Priority).ToList();
 
-            while (wantProceed)
+            while (wantProceed == nameof(YesNo.Yes))
             {
                 Console.Clear();
                 Console.WriteLine($"Please enter number of days. You will see the Tasks that can be completed in a given number of days ({Constants.WorkingHoursPerDay} working hours per day).");
-                inputHours = Convert.ToInt32(validation.GetValidDays()) * Constants.WorkingHoursPerDay;
+                inputHours = Convert.ToInt32(Validation.GetValidDays()) * Constants.WorkingHoursPerDay;
 
-                foreach (Task tTask in tasks)
+                foreach (Task task in tasks)
                 {
-                    if (inputHours >= enumHelper.GetEnumValueAttribute<Complexity>(tTask.Complexity))
+                    if (inputHours >= EnumHelper.GetEnumValueAttribute<Complexity>(task.Complexity))
                     {
-                        inputHours -= enumHelper.GetEnumValueAttribute<Complexity>(tTask.Complexity);
-                        Console.WriteLine($"{Environment.NewLine}Priority: {tTask.Priority}{Environment.NewLine}Complexity: {tTask.Complexity}{Environment.NewLine}Description: {tTask.Description}");
+                        inputHours -= EnumHelper.GetEnumValueAttribute<Complexity>(task.Complexity);
+                        Console.WriteLine($"{Environment.NewLine}Priority: {task.Priority}{Environment.NewLine}Complexity: {task.Complexity}{Environment.NewLine}Description: {task.Description}");
                     }
 
                     if (inputHours == 0)
@@ -105,8 +89,8 @@ namespace Task5Library
                     }
                 }
 
-                Console.WriteLine($"{Environment.NewLine}Do you want to enter another number of days: Yes/No");
-                wantProceed = validation.GetValidYesNo("Days");
+                Console.WriteLine($"{Environment.NewLine}Do you want to enter another number of days?");
+                wantProceed = EnumHelper.RequestForEnumValue<YesNo>().ToString();
             }
         }
     }

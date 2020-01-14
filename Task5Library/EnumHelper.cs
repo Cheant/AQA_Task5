@@ -6,11 +6,19 @@ namespace Task5Library
 {
     public class EnumHelper
     {
-        public string PrintEnumDefinition<TEnum>() where TEnum : struct
+        public static string PrintEnumDefinition<TEnum>() where TEnum : struct
         {
             StringBuilder sb = new StringBuilder();
 
-            sb.AppendLine($"{Environment.NewLine}Select {typeof(TEnum).Name}:");
+            if (typeof(TEnum).Name == typeof(YesNo).Name)
+            {
+                sb.AppendLine($"Please select:");
+            }
+            else
+            {
+                sb.AppendLine($"{Environment.NewLine}Please select {typeof(TEnum).Name}:");
+            }
+
             for (int index = 1; index < Enum.GetValues(typeof(TEnum)).Length + 1; index++)
             {
                 sb.AppendLine($"{index}. {Enum.GetName(typeof(TEnum), index)}");
@@ -18,7 +26,7 @@ namespace Task5Library
             return sb.ToString();
         }
 
-        public TEnum RequestForEnumValue<TEnum>() where TEnum : struct
+        public static TEnum RequestForEnumValue<TEnum>() where TEnum : struct
         {
             TEnum result;
             bool parseResult;
@@ -38,7 +46,7 @@ namespace Task5Library
             return result;
         }
 
-        public int GetEnumValueAttribute<TEnum>(Enum value) where TEnum : struct
+        public static int GetEnumValueAttribute<TEnum>(Enum value) where TEnum : struct
         {
             FieldInfo fi = value.GetType().GetField(value.ToString());
             EnumValueAttribute attribute = (EnumValueAttribute)fi.GetCustomAttribute(typeof(EnumValueAttribute), false);

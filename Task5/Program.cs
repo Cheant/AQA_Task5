@@ -9,8 +9,8 @@ namespace Task5
         {
             Calculation calculation = new Calculation();
 
-            calculation.RecordInputTasksAndPrintExecutionTime();
-            Console.ReadKey();
+            calculation.RecordInputTasks();
+            calculation.PrintExecutionTimeForAllTasks();
             calculation.PrintTasksByPriority();
             calculation.PrintTasksCompleteInEnteredDays();
         }
