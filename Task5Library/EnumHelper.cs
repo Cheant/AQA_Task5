@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Text;
+using System.Reflection;
 
 namespace Task5Library
 {
@@ -9,7 +10,7 @@ namespace Task5Library
         {
             StringBuilder sb = new StringBuilder();
 
-            sb.AppendLine($"Select {typeof(TEnum).Name}:");
+            sb.AppendLine($"{Environment.NewLine}Select {typeof(TEnum).Name}:");
             for (int index = 1; index < Enum.GetValues(typeof(TEnum)).Length + 1; index++)
             {
                 sb.AppendLine($"{index}. {Enum.GetName(typeof(TEnum), index)}");
@@ -35,6 +36,13 @@ namespace Task5Library
                 }
             } while (!parseResult);
             return result;
+        }
+
+        public int GetEnumValueAttribute<TEnum>(Enum value) where TEnum : struct
+        {
+            FieldInfo fi = value.GetType().GetField(value.ToString());
+            EnumValueAttribute attribute = (EnumValueAttribute)fi.GetCustomAttribute(typeof(EnumValueAttribute), false);
+            return attribute.EnumValue;
         }
     }
 }

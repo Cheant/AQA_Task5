@@ -25,7 +25,7 @@ namespace Task5Library
             while (wantProceed)
             {
                 Console.Clear();
-                Console.WriteLine($"Creation of a new Task.{Environment.NewLine}");
+                Console.WriteLine($"Creation of a new Task.");
                 inputPriority = enumHelper.RequestForEnumValue<Priority>();
 
                 inputComplexity = enumHelper.RequestForEnumValue<Complexity>();
@@ -36,13 +36,18 @@ namespace Task5Library
                 Console.WriteLine($"{Environment.NewLine}Do you want to create another Task: Yes/No");
                 wantProceed = validation.GetValidYesNo("Task");
 
-                EnumValueAttribute enumValueAttribute = new EnumValueAttribute(Convert.ToInt32(inputComplexity));
-
-                executionTime += EnumValueAttribute.GetEnumValueAttribute<Complexity>(inputComplexity);
+                executionTime += enumHelper.GetEnumValueAttribute<Complexity>(inputComplexity);
 
                 counter++;
 
-                tasks.Add(new Task() { TaskID = counter, PriorityID = Convert.ToInt32(inputPriority), Priority = inputPriority, Complexity = inputComplexity, Description = inputDescription });
+                tasks.Add(new Task()
+                {
+                    TaskID = counter,
+                    PriorityID = Convert.ToInt32(inputPriority),
+                    Priority = inputPriority,
+                    Complexity = inputComplexity,
+                    Description = inputDescription
+                });
             }
 
             Console.Clear();
@@ -64,7 +69,7 @@ namespace Task5Library
                 {
                     if (tTask.Priority == inputPriority)
                     {
-                        Console.WriteLine($"{Environment.NewLine}{tTask.PriorityID}Priority: {tTask.Priority}{Environment.NewLine}Complexity: {tTask.Complexity}{Environment.NewLine}Description: {tTask.Description}");
+                        Console.WriteLine($"{Environment.NewLine}Priority: {tTask.Priority}{Environment.NewLine}Complexity: {tTask.Complexity}{Environment.NewLine}Description: {tTask.Description}");
                     }
                 }
 
@@ -88,21 +93,9 @@ namespace Task5Library
 
                 foreach (Task tTask in tasks)
                 {
-                    if (tTask.Complexity == Enum.GetName(typeof(Complexity), 4) && inputHours >= Convert.ToInt32(Complexity.Hard))
+                    if (inputHours >= enumHelper.GetEnumValueAttribute<Complexity>(tTask.Complexity))
                     {
-                        inputHours -= Convert.ToInt32(Complexity.Hard);
-                        Console.WriteLine($"{Environment.NewLine}Priority: {tTask.Priority}{Environment.NewLine}Complexity: {tTask.Complexity}{Environment.NewLine}Description: {tTask.Description}");
-                    }
-
-                    if (tTask.Complexity == Enum.GetName(typeof(Complexity), 2) && inputHours >= Convert.ToInt32(Complexity.Medium))
-                    {
-                        inputHours -= Convert.ToInt32(Complexity.Medium);
-                        Console.WriteLine($"{Environment.NewLine}Priority: {tTask.Priority}{Environment.NewLine}Complexity: {tTask.Complexity}{Environment.NewLine}Description: {tTask.Description}");
-                    }
-
-                    if (tTask.Complexity == Enum.GetName(typeof(Complexity), 1) && inputHours >= Convert.ToInt32(Complexity.Simple))
-                    {
-                        inputHours -= Convert.ToInt32(Complexity.Simple);
+                        inputHours -= enumHelper.GetEnumValueAttribute<Complexity>(tTask.Complexity);
                         Console.WriteLine($"{Environment.NewLine}Priority: {tTask.Priority}{Environment.NewLine}Complexity: {tTask.Complexity}{Environment.NewLine}Description: {tTask.Description}");
                     }
 
