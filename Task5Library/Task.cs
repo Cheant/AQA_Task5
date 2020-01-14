@@ -4,8 +4,8 @@
     {
         public int TaskID { get; set; }
         public int PriorityID { get; set; }
-        public string PriorityName { get; set; }
-        public string ComplexityName { get; set; }
         public string Description { get; set; }
+        public Priority Priority { get; set; }
+        public Complexity Complexity { get; set; }
     }
 }

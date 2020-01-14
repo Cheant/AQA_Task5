@@ -4,7 +4,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{089DFA8F-07BE-44B8-A608-53FAF7F0D3F6}</ProjectGuid>
+    <ProjectGuid>{3A6E5232-59FF-4B4C-9371-1F4BD280C169}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Task5Library</RootNamespace>
@@ -44,7 +44,9 @@
     <Compile Include="Calculation.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="EnumComplexity.cs" />
+    <Compile Include="EnumHelper.cs" />
     <Compile Include="EnumPriority.cs" />
+    <Compile Include="EnumValueAttribute.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Task.cs" />
     <Compile Include="Validation.cs" />

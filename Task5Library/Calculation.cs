@@ -9,89 +9,66 @@ namespace Task5Library
 
         Validation validation = new Validation();
 
+        EnumHelper enumHelper = new EnumHelper();
+
+        //EnumValueAttribute enumValueAttribute = new EnumValueAttribute(_enumValue);
+
         public void RecordInputTasksAndPrintExecutionTime()
         {
             int counter = 0;
             int executionTime = 0;
-            int inputPriorityID = 1;
-            string inputPriority;
-            string inputComplexity;
+            Priority inputPriority;
+            Complexity inputComplexity;
             string inputDescription;
             bool wantProceed = true;
 
             while (wantProceed)
             {
                 Console.Clear();
-                Console.WriteLine($"Please select priority for a new task:");
-                validation.PrintAllPriorities();
-                inputPriority = validation.GetValidPriority();
+                Console.WriteLine($"Creation of a new Task.{Environment.NewLine}");
+                inputPriority = enumHelper.RequestForEnumValue<Priority>();
 
-                Console.WriteLine($"{Environment.NewLine}Please select number of complexity for a new task:");
-                validation.PrintAllComplexities();
-                inputComplexity = validation.GetValidComplexity();
+                inputComplexity = enumHelper.RequestForEnumValue<Complexity>();
 
-                Console.WriteLine($"{Environment.NewLine}Please enter description for a new task:");
+                Console.WriteLine($"{Environment.NewLine}Enter Description:");
                 inputDescription = validation.GetValueNotNullOrEmpty("Description");
 
-                Console.WriteLine($"{Environment.NewLine}Do you want to enter another task: Yes/No");
+                Console.WriteLine($"{Environment.NewLine}Do you want to create another Task: Yes/No");
                 wantProceed = validation.GetValidYesNo("Task");
 
-                switch (inputPriority)
-                {
-                    case "High":
-                        inputPriorityID = Convert.ToInt32(Priority.High);
-                        break;
-                    case "Medium":
-                        inputPriorityID = Convert.ToInt32(Priority.Medium);
-                        break;
-                    case "Low":
-                        inputPriorityID = Convert.ToInt32(Priority.Low);
-                        break;
-                }
+                EnumValueAttribute enumValueAttribute = new EnumValueAttribute(Convert.ToInt32(inputComplexity));
 
-                switch (inputComplexity)
-                {
-                    case "Hard":
-                        executionTime += Convert.ToInt32(Complexity.Hard);
-                        break;
-                    case "Medium":
-                        executionTime += Convert.ToInt32(Complexity.Medium);
-                        break;
-                    case "Simple":
-                        executionTime += Convert.ToInt32(Complexity.Simple);
-                        break;
-                }
+                executionTime += EnumValueAttribute.GetEnumValueAttribute<Complexity>(inputComplexity);
 
                 counter++;
 
-                tasks.Add(new Task() { TaskID = counter, PriorityID = inputPriorityID, PriorityName = inputPriority, ComplexityName = inputComplexity, Description = inputDescription });
+                tasks.Add(new Task() { TaskID = counter, PriorityID = Convert.ToInt32(inputPriority), Priority = inputPriority, Complexity = inputComplexity, Description = inputDescription });
             }
 
             Console.Clear();
-            Console.WriteLine($"{executionTime} hours are needed to complete all tasks.{Environment.NewLine}");
+            Console.WriteLine($"{executionTime} hours are needed to complete all Tasks.{Environment.NewLine}");
         }
 
         public void PrintTasksByPriority()
         {
-            string inputPriority;
+            Priority inputPriority;
             bool wantProceed = true;
 
             while (wantProceed)
             {
                 Console.Clear();
-                Console.WriteLine($"Please select number of priority to see all tasks with such priority:");
-                validation.PrintAllPriorities();
-                inputPriority = validation.GetValidPriority();
+                Console.WriteLine($"Displaying Tasks by selected Priority.{Environment.NewLine}");
+                inputPriority = enumHelper.RequestForEnumValue<Priority>();
 
                 foreach (Task tTask in tasks)
                 {
-                    if (tTask.PriorityName.ToLower() == inputPriority.ToLower())
+                    if (tTask.Priority == inputPriority)
                     {
-                        Console.WriteLine($"{Environment.NewLine}Priority: {tTask.PriorityName}{Environment.NewLine}Complexity: {tTask.ComplexityName}{Environment.NewLine}Description: {tTask.Description}");
+                        Console.WriteLine($"{Environment.NewLine}{tTask.PriorityID}Priority: {tTask.Priority}{Environment.NewLine}Complexity: {tTask.Complexity}{Environment.NewLine}Description: {tTask.Description}");
                     }
                 }
 
-                Console.WriteLine($"{Environment.NewLine}Do you want to see the tasks of another priority: Yes/No");
+                Console.WriteLine($"{Environment.NewLine}Do you want to see the Tasks of another Priority: Yes/No");
                 wantProceed = validation.GetValidYesNo("Priority");
             }
         }
@@ -99,7 +76,6 @@ namespace Task5Library
         public void PrintTasksCompleteInEnteredDays()
         {
             int inputHours = 0;
-            string inputDays;
             bool wantProceed = true;
 
             tasks.Sort((x, y) => x.PriorityID.CompareTo(y.PriorityID));
@@ -107,28 +83,27 @@ namespace Task5Library
             while (wantProceed)
             {
                 Console.Clear();
-                Console.WriteLine($"Please enter number of days. You will see the tasks that can be completed in a given number of days ({Constants.WorkingHoursPerDay} working hours per day).");
-                inputDays = validation.GetValidDays();
-                inputHours = Convert.ToInt32(inputDays) * Constants.WorkingHoursPerDay;
+                Console.WriteLine($"Please enter number of days. You will see the Tasks that can be completed in a given number of days ({Constants.WorkingHoursPerDay} working hours per day).");
+                inputHours = Convert.ToInt32(validation.GetValidDays()) * Constants.WorkingHoursPerDay;
 
                 foreach (Task tTask in tasks)
                 {
-                    if (tTask.ComplexityName == Enum.GetName(typeof(Complexity), 4) && inputHours >= Convert.ToInt32(Complexity.Hard))
+                    if (tTask.Complexity == Enum.GetName(typeof(Complexity), 4) && inputHours >= Convert.ToInt32(Complexity.Hard))
                     {
                         inputHours -= Convert.ToInt32(Complexity.Hard);
-                        Console.WriteLine($"{Environment.NewLine}Priority: {tTask.PriorityName}{Environment.NewLine}Complexity: {tTask.ComplexityName}{Environment.NewLine}Description: {tTask.Description}");
+                        Console.WriteLine($"{Environment.NewLine}Priority: {tTask.Priority}{Environment.NewLine}Complexity: {tTask.Complexity}{Environment.NewLine}Description: {tTask.Description}");
                     }
 
-                    if (tTask.ComplexityName == Enum.GetName(typeof(Complexity), 2) && inputHours >= Convert.ToInt32(Complexity.Medium))
+                    if (tTask.Complexity == Enum.GetName(typeof(Complexity), 2) && inputHours >= Convert.ToInt32(Complexity.Medium))
                     {
                         inputHours -= Convert.ToInt32(Complexity.Medium);
-                        Console.WriteLine($"{Environment.NewLine}Priority: {tTask.PriorityName}{Environment.NewLine}Complexity: {tTask.ComplexityName}{Environment.NewLine}Description: {tTask.Description}");
+                        Console.WriteLine($"{Environment.NewLine}Priority: {tTask.Priority}{Environment.NewLine}Complexity: {tTask.Complexity}{Environment.NewLine}Description: {tTask.Description}");
                     }
 
-                    if (tTask.ComplexityName == Enum.GetName(typeof(Complexity), 1) && inputHours >= Convert.ToInt32(Complexity.Simple))
+                    if (tTask.Complexity == Enum.GetName(typeof(Complexity), 1) && inputHours >= Convert.ToInt32(Complexity.Simple))
                     {
                         inputHours -= Convert.ToInt32(Complexity.Simple);
-                        Console.WriteLine($"{Environment.NewLine}Priority: {tTask.PriorityName}{Environment.NewLine}Complexity: {tTask.ComplexityName}{Environment.NewLine}Description: {tTask.Description}");
+                        Console.WriteLine($"{Environment.NewLine}Priority: {tTask.Priority}{Environment.NewLine}Complexity: {tTask.Complexity}{Environment.NewLine}Description: {tTask.Description}");
                     }
 
                     if (inputHours == 0)

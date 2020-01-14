@@ -6,99 +6,46 @@ namespace Task5Library
     {
         private string _inputValue;
 
-        public string GetValidPriority()
-        {
-            bool validValue = false;
-            _inputValue = GetValueNotNullOrEmpty("Priority");
-
-            while (!validValue)
-            {
-                foreach (string s in Enum.GetNames(typeof(Priority)))
-                {
-                    if (_inputValue.ToLower() == s.ToLower())
-                    {
-                        return s;
-                    }
-                }
-
-                Console.Clear();
-                Console.WriteLine($"Entered value is invalid.{Environment.NewLine}Please select priority:");
-                PrintAllPriorities();
-
-                _inputValue = GetValueNotNullOrEmpty("Priority");
-            }
-            return _inputValue;
-        }
-
-        public string GetValidComplexity()
-        {
-            bool validValue = false;
-            _inputValue = GetValueNotNullOrEmpty("Complexity");
-
-            while (!validValue)
-            {
-                foreach (string s in Enum.GetNames(typeof(Complexity)))
-                {
-                    if (_inputValue.ToLower() == s.ToLower())
-                    {
-                        return s;
-                    }
-                }
-
-                Console.Clear();
-                Console.WriteLine($"Entered value is invalid.{Environment.NewLine}Please select complexity for a new task:");
-                PrintAllComplexities();
-
-                _inputValue = GetValueNotNullOrEmpty("Complexity");
-            }
-            return _inputValue;
-        }
-
         public bool GetValidYesNo(string parameter)
         {
-            _inputValue = GetValueNotNullOrEmpty("Another" + parameter);
-
-            while (_inputValue.ToLower() != "yes" && _inputValue.ToLower() != "no")
+            do
             {
+                _inputValue = GetValueNotNullOrEmpty("Another" + parameter);
                 Console.Clear();
 
                 if (parameter == "Task")
                 {
-                    Console.WriteLine($"Entered value is invalid.{Environment.NewLine}Do you want to enter another task: Yes/No");
+                    Console.WriteLine($"Entered value is invalid.{Environment.NewLine}Do you want to create another Task: Yes/No");
                 }
 
-                if (parameter == "Priority")
+                else if (parameter == "Priority")
                 {
-                    Console.WriteLine($"Entered value is invalid.{Environment.NewLine}Do you want to see the tasks of another priority: Yes/No");
+                    Console.WriteLine($"Entered value is invalid.{Environment.NewLine}Do you want to see the Tasks of another Priority: Yes/No");
                 }
 
-                if (parameter == "Days")
+                else
                 {
                     Console.WriteLine($"Entered value is invalid.{Environment.NewLine}Do you want to enter another number of days: Yes/No");
                 }
-
-                _inputValue = GetValueNotNullOrEmpty("Another" + parameter);
-            }
+            } while (_inputValue.ToLower() != "yes" && _inputValue.ToLower() != "no");
 
             if (_inputValue.ToLower() == "yes")
             {
                 return true;
             }
-
             return false;
         }
 
         public string GetValidDays()
         {
-            _inputValue = GetValueNotNullOrEmpty("Days");
-
-            while (!int.TryParse(_inputValue, out int validatedValue) || validatedValue <= 0)
+            do
             {
+                _inputValue = GetValueNotNullOrEmpty("Days");
                 Console.Clear();
 
-                Console.WriteLine($"Entered value is invalid.{Environment.NewLine}Please enter number of days. You will see the tasks that can be completed in a given number of days ({Constants.WorkingHoursPerDay} working hours per day).");
-                _inputValue = GetValueNotNullOrEmpty("Days");
-            }
+                Console.WriteLine($"Entered value is invalid.{Environment.NewLine}Please enter number of days. You will see the Tasks that can be completed in a given number of days ({Constants.WorkingHoursPerDay} working hours per day).");
+            } while (!int.TryParse(_inputValue, out int validatedValue) || validatedValue <= 0);
+
             return _inputValue;
         }
 
@@ -110,39 +57,27 @@ namespace Task5Library
             {
                 Console.Clear();
 
-                if (parameter == "Priority")
-                {
-                    Console.WriteLine($"Entered value is null or empty.{Environment.NewLine}Please select priority:");
-                    PrintAllPriorities();
-                }
-
-                if (parameter == "Complexity")
-                {
-                    Console.WriteLine($"Entered value is null or empty.{Environment.NewLine}Please select complexity for a new task:");
-                    PrintAllComplexities();
-                }
-
                 if (parameter == "Description")
                 {
-                    Console.WriteLine($"Entered value is null or empty.{Environment.NewLine}Please enter description for a new task:");
+                    Console.WriteLine($"Entered value is null or empty.{Environment.NewLine}Enter Description:");
                 }
 
-                if (parameter == "AnotherTask")
+                else if (parameter == "AnotherTask")
                 {
-                    Console.WriteLine($"Entered value is null or empty.{Environment.NewLine}Do you want to enter another task: Yes/No");
+                    Console.WriteLine($"Entered value is null or empty.{Environment.NewLine}Do you want to create another Task: Yes/No");
                 }
 
-                if (parameter == "AnotherPriority")
+                else if (parameter == "AnotherPriority")
                 {
-                    Console.WriteLine($"Entered value is null or empty.{Environment.NewLine}Do you want to see the tasks of another priority: Yes/No");
+                    Console.WriteLine($"Entered value is null or empty.{Environment.NewLine}Do you want to see the Tasks of another Priority: Yes/No");
                 }
 
-                if (parameter == "Days")
+                else if (parameter == "Days")
                 {
-                    Console.WriteLine($"Entered value is null or empty.{Environment.NewLine}Please enter number of days. You will see the tasks that can be completed in a given number of days ({Constants.WorkingHoursPerDay} working hours per day).");
+                    Console.WriteLine($"Entered value is null or empty.{Environment.NewLine}Please enter number of days. You will see the Tasks that can be completed in a given number of days ({Constants.WorkingHoursPerDay} working hours per day).");
                 }
 
-                if (parameter == "AnotherDays")
+                else
                 {
                     Console.WriteLine($"Entered value is null or empty.{Environment.NewLine}Do you want to enter another number of days: Yes/No");
                 }
@@ -150,24 +85,6 @@ namespace Task5Library
                 inputValue = Console.ReadLine();
             }
             return inputValue;
-        }
-
-        public void PrintAllPriorities()
-        {
-            foreach (string s in Enum.GetNames(typeof(Priority)))
-            {
-                Console.Write("{0}   ", s);
-            }
-            Console.WriteLine($"{Environment.NewLine}");
-        }
-
-        public void PrintAllComplexities()
-        {
-            foreach (string s in Enum.GetNames(typeof(Complexity)))
-            {
-                Console.Write("{0}   ", s);
-            }
-            Console.WriteLine($"{Environment.NewLine}");
         }
     }
 }
