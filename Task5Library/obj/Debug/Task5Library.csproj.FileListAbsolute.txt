@@ -1,5 +1,0 @@
-C:\Users\AntonC\source\repos\Task5\Task5Library\bin\Debug\Task5Library.dll
-C:\Users\AntonC\source\repos\Task5\Task5Library\bin\Debug\Task5Library.pdb
-C:\Users\AntonC\source\repos\Task5\Task5Library\obj\Debug\Task5Library.csprojAssemblyReference.cache
-C:\Users\AntonC\source\repos\Task5\Task5Library\obj\Debug\Task5Library.dll
-C:\Users\AntonC\source\repos\Task5\Task5Library\obj\Debug\Task5Library.pdb

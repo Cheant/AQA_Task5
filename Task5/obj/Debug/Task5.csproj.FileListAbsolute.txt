@@ -1,9 +1,0 @@
-C:\Users\AntonC\source\repos\Task5\Task5\bin\Debug\Task5.exe.config
-C:\Users\AntonC\source\repos\Task5\Task5\bin\Debug\Task5.exe
-C:\Users\AntonC\source\repos\Task5\Task5\bin\Debug\Task5.pdb
-C:\Users\AntonC\source\repos\Task5\Task5\bin\Debug\Task5Library.dll
-C:\Users\AntonC\source\repos\Task5\Task5\bin\Debug\Task5Library.pdb
-C:\Users\AntonC\source\repos\Task5\Task5\obj\Debug\Task5.csprojAssemblyReference.cache
-C:\Users\AntonC\source\repos\Task5\Task5\obj\Debug\Task5.csproj.CopyComplete
-C:\Users\AntonC\source\repos\Task5\Task5\obj\Debug\Task5.exe
-C:\Users\AntonC\source\repos\Task5\Task5\obj\Debug\Task5.pdb
